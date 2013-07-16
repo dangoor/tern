@@ -1,4 +1,6 @@
-var useWorker = true;
+var useWorker = window.location.search.indexOf("noworker") === -1;
+
+alert(useWorker);
 
 var server, editor, defs = [];
 var Pos = CodeMirror.Pos;
@@ -105,7 +107,7 @@ function initEditor() {
   });
 
   editor.on("cursorActivity", function(cm) { server.updateArgHints(cm); });
-  if (window.location.search === "?crash") {
+  if (window.location.search.indexOf("crash") > -1) {
     registerDoc("test.js", editor.getDoc());
     load("demo/polymer.min.js", function(body) {
       registerDoc("polymer.min.js", new CodeMirror.Doc(body, "javascript"));
