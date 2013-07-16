@@ -1,7 +1,5 @@
 var useWorker = window.location.search.indexOf("noworker") === -1;
 
-alert(useWorker);
-
 var server, editor, defs = [];
 var Pos = CodeMirror.Pos;
 
