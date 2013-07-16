@@ -1,4 +1,4 @@
-var useWorker = false;
+var useWorker = true;
 
 var server, editor, defs = [];
 var Pos = CodeMirror.Pos;
@@ -105,13 +105,22 @@ function initEditor() {
   });
 
   editor.on("cursorActivity", function(cm) { server.updateArgHints(cm); });
-
-  registerDoc("test.js", editor.getDoc());
-  registerDoc("test_dep.js", new CodeMirror.Doc(document.getElementById("requirejs_test_dep").firstChild.nodeValue, "javascript"));
-  load("demo/underscore.js", function(body) {
-    registerDoc("underscore.js", new CodeMirror.Doc(body, "javascript"));
-  });
-
+  if (window.location.search === "?crash") {
+    registerDoc("test.js", editor.getDoc());
+    load("demo/polymer.min.js", function(body) {
+      registerDoc("polymer.min.js", new CodeMirror.Doc(body, "javascript"));
+    });  
+    load("demo/web-animations.js", function(body) {
+      registerDoc("web-animations.js", new CodeMirror.Doc(body, "javascript"));
+    });  
+  } else {
+    registerDoc("test.js", editor.getDoc());
+    registerDoc("test_dep.js", new CodeMirror.Doc(document.getElementById("requirejs_test_dep").firstChild.nodeValue, "javascript"));
+    load("demo/underscore.js", function(body) {
+      registerDoc("underscore.js", new CodeMirror.Doc(body, "javascript"));
+    });  
+  }
+  
   CodeMirror.on(document.getElementById("docs"), "click", function(e) {
     var target = e.target || e.srcElement;
     if (target.nodeName.toLowerCase() != "li") return;
